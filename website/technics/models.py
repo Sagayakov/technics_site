@@ -41,7 +41,6 @@ class Technics(models.Model):
     small_description = models.CharField(max_length=200, default='', verbose_name='Краткое описание')
     description = models.TextField(default='', verbose_name='Описание')
     photo_main = models.ImageField(upload_to='photos/technics', verbose_name='Фото', null=True, blank=True)
-    # images = models.ForeignKey(PhotoAnimal)
     year = models.PositiveSmallIntegerField(null=True, blank=True, verbose_name='Год выпуска')
     slug = models.SlugField(blank=True, null=True, db_index=True, unique=True, verbose_name='Ссылка')
     is_public = models.BooleanField(default=True, verbose_name='Публикация')
@@ -65,7 +64,7 @@ class Technics(models.Model):
 
     class Meta:
         verbose_name = "Техника"
-        verbose_name_plural = "Техники"
+        verbose_name_plural = "Техника"
 
 
 class Comments(models.Model):

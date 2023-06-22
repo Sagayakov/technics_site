@@ -12,7 +12,6 @@ class TechnicsView(ListView):
     model = Technics
     queryset = Technics.objects.filter(is_public=True)
     template_name = 'technics/technics.html'
-    # context_object_name = 'technics'
 
 
 class TechnicDetailView(DetailView):

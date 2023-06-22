@@ -1,3 +1,5 @@
+{% load technic_tag %}
+
 
     <header class="header">
         <div class="container-fluid px-lg-5">
@@ -20,9 +22,10 @@
                         <a href="#">Категории <span class="fa fa-angle-down" aria-hidden="true"></span></a>
                         <input type="checkbox" id="drop-2">
                         <ul>
-                            <li><a href="moviesingle.html">Ноутбуки</a></li>
-                            <li><a href="moviesingle.html">ПК</a></li>
-                            <li><a href="moviesingle.html">Мониторы</a></li>
+                            {% get_categories as categories %}
+                            {% for category in categories %}
+                            <li><a href="/">{{ category }}</a></li>
+                            {% endfor %}
                         </ul>
                     </li>
                     <li><a href="contact.html"

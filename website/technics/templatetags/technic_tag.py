@@ -15,7 +15,8 @@ def get_categories():
 
 @register.inclusion_tag('technics/tags/last_tech.html')
 def get_last_tech(count=5):
-    """Достаем последние добавленные объекты модели Technics"""
+    """Достаем последние добавленные объекты модели Technics.
+    Передается в last_tech.html"""
 
     technic = Technics.objects.order_by('id')[:count]
     return {'last_tech': technic}

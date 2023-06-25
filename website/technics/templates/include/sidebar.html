@@ -10,24 +10,15 @@
 <!--preference -->
 <div class="left-side my-4">
     <h3 class="sear-head editContent">Категория</h3>
-    <ul class="w3layouts-box-list">
-        <li class="editContent">
-            <input type="checkbox" class="checked">
-            <span class="span editContent">Ноутбук</span>
-        </li>
-        <li class="editContent">
-            <input type="checkbox" class="checked">
-            <span class="span editContent">ПК</span>
-        </li>
-        <li class="editContent">
-            <input type="checkbox" class="checked">
-            <span class="span editContent">Монитор</span>
-        </li>
-        <li class="editContent">
-            <input type="checkbox" class="checked">
-            <span class="span editContent">Наушники</span>
-        </li>
-    </ul>
+    {% get_categories as categories %}
+    {% for category in categories %}
+        <ul class="w3layouts-box-list">
+            <li class="editContent">
+                <input type="checkbox" class="checked">
+                <span class="span editContent">{{ category }}</span>
+            </li>
+        </ul>
+    {% endfor %}
 </div>
 <!-- // preference -->
 <!-- discounts -->

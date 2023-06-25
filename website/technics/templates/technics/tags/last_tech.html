@@ -3,11 +3,14 @@
     {% for tech in last_tech %}
         <div class="special-sec1 row mt-3 editContent">
             <div class="img-deals col-md-4">
-                <img src="{{ tech.photo_main.url }}" class="img-fluid" alt="">
+                <a href="{{ tech.get_absolute_url }}" class="editContent">
+                    <img src="{{ tech.photo_main.url }}" class="img-fluid" alt="Фото">
+                </a>
             </div>
             <div class="img-deal1 col-md-4">
-                <h3 class="editContent">{{ tech.mark }} {{tech.model }}</h3>
-                <a href="{{ tech.get_absolute_url }}" class="editContent"></a>
+                <a href="{{ tech.get_absolute_url }}" class="editContent">
+                    <h3 class="editContent">{{ tech.mark }} {{tech.model }}</h3>
+                </a>
             </div>
         </div>
     {% endfor %}

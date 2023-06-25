@@ -7,52 +7,50 @@
         <button class="btn1 btn"><span class="fa fa-search" aria-hidden="true"></span></button>
     </form>
 </div>
-<!--preference -->
-<div class="left-side my-4">
-    <h3 class="sear-head editContent">Категория</h3>
-    {% get_categories as categories %}
-    {% for category in categories %}
+
+<form action="{% url 'filter_url' %}" method="get">
+
+    <div class="left-side my-4">
+        <h3 class="sear-head editContent">Категория</h3>
+        {% get_categories as categories %}
+        {% for category in categories %}
+            <ul class="w3layouts-box-list">
+                <li class="editContent">
+                    <input type="checkbox" class="checked" name="category" value="{{ category.id }}">
+                    <span class="span editContent">{{ category }}</span>
+                </li>
+            </ul>
+        {% endfor %}
+    </div>
+
+    <div class="left-side">
+        <h3 class="sear-head editContent">Марка</h3>
         <ul class="w3layouts-box-list">
-            <li class="editContent">
-                <input type="checkbox" class="checked">
-                <span class="span editContent">{{ category }}</span>
-            </li>
+            {% for mark_it in view.get_mark %}
+                <li class="editContent">
+                    <input type="checkbox" class="checked" name="mark" value="{{ mark_it.id }}">
+                    <span class="span editContent">{{ mark_it.mark }}</span>
+                </li>
+            {% endfor %}
         </ul>
-    {% endfor %}
-</div>
-<!-- // preference -->
-<!-- discounts -->
-<div class="left-side">
-    <h3 class="sear-head editContent">Год</h3>
-    <ul class="w3layouts-box-list">
-        <li class="editContent">
-            <input type="checkbox" class="checked">
-            <span class="span editContent">2023</span>
-        </li>
-        <li class="editContent">
-            <input type="checkbox" class="checked">
-            <span class="span editContent">2022</span>
-        </li>
-        <li class="editContent">
-            <input type="checkbox" class="checked">
-            <span class="span editContent">2021</span>
-        </li>
-        <li>
-            <input type="checkbox" class="checked">
-            <span class="span editContent">2020</span>
-        </li>
-        <li class="editContent">
-            <input type="checkbox" class="checked">
-            <span class="span editContent">2019</span>
-        </li>
-        <li class="editContent">
-            <input type="checkbox" class="checked">
-            <span class="span editContent">2018</span>
-        </li>
-    </ul>
-</div>
-<!-- //discounts -->
-<!-- reviews -->
+    </div>
+
+
+    <div class="left-side">
+        <h3 class="sear-head editContent">Год</h3>
+        <ul class="w3layouts-box-list">
+            {% for year_it in view.get_year %}
+                <li class="editContent">
+                    <input type="checkbox" class="checked" name="year" value="{{ year_it.year }}">
+                    <span class="span editContent">{{ year_it.year }}</span>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+    <button type="submit">Найти</button>
+</form>
+
+<!-- рейтинг -->
 <div class="customer-rev left-side my-4">
     <h3 class="sear-head editContent">Рейтинг</h3>
     <ul class="w3layouts-box-list">

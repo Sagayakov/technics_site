@@ -1,5 +1,5 @@
 {% extends 'technics/base.html' %}
-
+{% load static %}
 {% block header %} bg1 {% endblock header %}
 
 {% block technics %}
@@ -12,11 +12,21 @@
 
         <div class="col-md-4 product-men">
             <div class="product-shoe-info editContent text-center mt-lg-4">
-                <div class="men-thumb-item">
-                    <a href="{{ technic.get_absolute_url }}" class="editContent">
-                        <img src="{{ technic.photo_main.url }}" class="img-fluid" alt="">
-                    </a>
-                </div>
+                {% if technic.photo_main %}
+                    <div class="men-thumb-item">
+                        <a href="{{ technic.get_absolute_url }}" class="editContent">
+                            <img src="{{ technic.photo_main.url }}" class="img-fluid" alt="">
+                        </a>
+                    </div>
+                {% else %}
+                    <div class="men-thumb-item">
+                        <a href="{{ technic.get_absolute_url }}" class="editContent">
+<!--                            Найти подходящее фото по умолчанию, отображаемое если нет у модели-->
+                            <img src="{% static 'technics/images/te1.jpg' %}" class="img-fluid" alt="">
+                        </a>
+                    </div>
+
+                {% endif %}
                 <div class="item-info-product">
                     <h4 class="">
                         <a href="{{ technic.get_absolute_url }}" class="editContent">

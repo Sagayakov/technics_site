@@ -3,164 +3,168 @@
 
 {% block title %} {{ technic.mark }} {{ technic.model }} {% endblock title %}
 
-    {% block container %}
-        <div class="container py-md-3">
+{% block container %}
+<div class="container py-md-3">
     {% endblock container %}
 
     {% block sidebar %}
-        <div class="side-bar col-lg-3">
-    {% endblock sidebar %}
+    <div class="side-bar col-lg-3">
+        {% endblock sidebar %}
 
-{% block technics %}
-    <div class="left-ads-display col-lg-8">
-        <div class="row">
-            <div class="desc1-left col-md-6">
-                <img src="{{ technic.photo_main.url }}" class="img-fluid" alt="">
-            </div>
-            <div class="desc1-right col-md-6 pl-lg-4">
-                <h3 class="editContent" style="outline: none; cursor: inherit;">
-                    {{ technic.name }}
-                </h3>
-                <h5 class="editContent"></h5>
-                <ul>
-                    <li style="list-style: none">
-                        <span><b>Марка:</b> {{ technic.mark }} </span></li>
-                    <li style="list-style: none">
-                        <span><b>Модель:</b> {{ technic.model }}</span>
-                    </li>
-                    <li style="list-style: none">
-                        <span><b>Категория:</b> {{ technic.category }}</span>
-                    </li>
-                    <li style="list-style: none">
-                        <span><b>Год:</b> {{ technic.year }}</span>
-                    </li>
-                    <li style="list-style: none">
-                        <span><b>О моделе:</b> {{ technic.small_description }} </span>
-                    </li>
-                    <li style="list-style: none">
-                        <a href="#"><b>Рейтинг:</b>
-                            <span class="fa fa-star" aria-hidden="true"
-                                  style="outline: none; cursor: inherit;"></span>
-                            <span class="fa fa-star" aria-hidden="true"
-                                  style="outline: none; cursor: inherit;"></span>
-                            <span class="fa fa-star" aria-hidden="true"
-                                  style="outline: none; cursor: inherit;"></span>
-                            <span class="fa fa-star" aria-hidden="true"
-                                  style="outline: none; cursor: inherit;"></span>
-                            <span class="fa fa-star" aria-hidden="true"
-                                  style="outline: none; cursor: inherit;"></span>
-                            <span class="editContent"
-                                  style="outline: none; cursor: inherit;">5.0</span>
-                        </a>
-                    </li>
-                    <div class="share-desc">
-                        <div class="share">
-                            <h4 class="editContent"
-                                style="outline: none; cursor: inherit;">
-                                Share:</h4>
-                            <ul class="w3layouts_social_list list-unstyled">
-                                <li>
-                                    <a href="#" class="w3pvt_facebook editContent"
-                                       style="outline: none; cursor: inherit;">
+        {% block technics %}
+        <div class="left-ads-display col-lg-8">
+            <div class="row">
+                {% if technic.photo_main %}
+                    <div class="desc1-left col-md-6">
+                        <img src="{{ technic.photo_main.url }}" class="img-fluid" alt="">
+                    </div>
+                {% endif %}
+                <div class="desc1-right col-md-6 pl-lg-4">
+                    <h3 class="editContent" style="outline: none; cursor: inherit;">
+                        {{ technic.name }}
+                    </h3>
+                    <h5 class="editContent"></h5>
+                    <ul>
+                        <li style="list-style: none">
+                            <span><b>Марка:</b> {{ technic.mark }} </span></li>
+                        <li style="list-style: none">
+                            <span><b>Модель:</b> {{ technic.model }}</span>
+                        </li>
+                        <li style="list-style: none">
+                            <span><b>Категория:</b> {{ technic.category }}</span>
+                        </li>
+                        <li style="list-style: none">
+                            <span><b>Год:</b> {{ technic.year }}</span>
+                        </li>
+                        <li style="list-style: none">
+                            <span><b>О моделе:</b> {{ technic.small_description }} </span>
+                        </li>
+                        <li style="list-style: none">
+                            <a href="#"><b>Рейтинг:</b>
+                                <span class="fa fa-star" aria-hidden="true"
+                                      style="outline: none; cursor: inherit;"></span>
+                                <span class="fa fa-star" aria-hidden="true"
+                                      style="outline: none; cursor: inherit;"></span>
+                                <span class="fa fa-star" aria-hidden="true"
+                                      style="outline: none; cursor: inherit;"></span>
+                                <span class="fa fa-star" aria-hidden="true"
+                                      style="outline: none; cursor: inherit;"></span>
+                                <span class="fa fa-star" aria-hidden="true"
+                                      style="outline: none; cursor: inherit;"></span>
+                                <span class="editContent"
+                                      style="outline: none; cursor: inherit;">5.0</span>
+                            </a>
+                        </li>
+                    </ul>
+                        <div class="share-desc">
+                            <div class="share">
+                                <h4 class="editContent"
+                                    style="outline: none; cursor: inherit;">
+                                    Share:</h4>
+                                <ul class="w3layouts_social_list list-unstyled">
+                                    <li>
+                                        <a href="#" class="w3pvt_facebook editContent"
+                                           style="outline: none; cursor: inherit;">
                                                     <span class="fa fa-facebook-f"
                                                           style="outline: none; cursor: inherit;"></span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#" class="w3pvt_twitter editContent"
-                                       style="outline: none; cursor: inherit;">
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#" class="w3pvt_twitter editContent"
+                                           style="outline: none; cursor: inherit;">
                                                     <span class="fa fa-twitter"
                                                           style="outline: none; cursor: inherit;"></span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#" class="w3pvt_dribble editContent"
-                                       style="outline: none; cursor: inherit;">
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#" class="w3pvt_dribble editContent"
+                                           style="outline: none; cursor: inherit;">
                                                     <span class="fa fa-dribbble"
                                                           style="outline: none; cursor: inherit;"></span>
-                                    </a>
-                                </li>
-                            </ul>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="clearfix"></div>
                         </div>
-                        <div class="clearfix"></div>
-                    </div>
+                </div>
             </div>
-        </div>
 
-        <!--                    Описание техники с подробной информацией-->
-        <div class="row sub-para-w3layouts mt-5">
+            <!--                    Описание техники с подробной информацией-->
+            <div class="row sub-para-w3layouts mt-5">
 
-            <h3 class="shop-sing editContent" style="outline: none; cursor: inherit;">
-                Краткое описание {{ technic.small_description }}
-            </h3>
-            <p>
-                {% for photo in technic.phototech_set.all %}
+                <h3 class="shop-sing editContent" style="outline: none; cursor: inherit;">
+                    Краткое описание {{ technic.small_description }}
+                </h3>
+                <p>
+                    {% for photo in technic.phototech_set.all %}
                     {{ photo.title }} <br>
                     <img src="{{ photo.image.url }}" class="img-tech-shots" alt="{{ photo.description }}">
                     <br>
-                {% endfor %}
-            </p>
-            <p class="editContent" style="outline: none; cursor: inherit;">
-                {{ technic.description|safe }}
-            </p>
-            <!--                        видео-->
-            <p class="mt-3 italic-blue editContent"
-               style="outline: none; cursor: inherit;">
-                <iframe width="560" height="315"
-                        src="https://www.youtube.com/embed/A36LahZNUiE?controls=0"
-                        frameborder="0" allow="accelerometer; autoplay;
+                    {% endfor %}
+                </p>
+                <p class="editContent" style="outline: none; cursor: inherit;">
+                    {{ technic.description|safe }}
+                </p>
+                <!--                        видео-->
+                <p class="mt-3 italic-blue editContent"
+                   style="outline: none; cursor: inherit;">
+                    <iframe width="560" height="315"
+                            src="https://www.youtube.com/embed/A36LahZNUiE?controls=0"
+                            frameborder="0" allow="accelerometer; autoplay;
                                                                                encrypted-media; gyroscope; picture-in-picture"
-                        allowfullscreen>
+                            allowfullscreen>
 
-                </iframe>
-            </p>
-        </div>
-        <hr>
+                    </iframe>
+                </p>
+            </div>
+            <hr>
 
-    <!--    Отзывы-->
+            <!--    Отзывы-->
 
-        <div class="row">
-            <div class="single-form-left">
-                <!-- contact form grid -->
-                <div class="contact-single">
-                    <h3 class="editContent" style="outline: none; cursor: inherit;">
-                        <span class="sub-tittle editContent">Колличество отзывов: {{ technic.comments_set.count }}</span>
-                        Оставить отзыв
-                    </h3>
-                    <form action="{% url 'add_comments_url' technic.id %}" method="post" class="mt-4" id="formComment">
-                        {% csrf_token %}
-                        <input type="hidden" name="parent" id="contactparent" value="">
-                        <div class="form-group editContent">
-                            <label for="contactcomment" class="editContent">
-                                Ваш комментарий *
-                            </label>
-                            <textarea class="form-control border" rows="5" name="text"
-                                      id="contactcomment" required=""></textarea>
-                        </div>
-                        <div class="d-sm-flex">
-                            <div class="col-sm-6 form-group p-0 editContent">
-                                <label for="contactusername" class="editContent">
-                                    Имя *
+            <div class="row">
+                <div class="single-form-left">
+                    <!-- contact form grid -->
+                    <div class="contact-single">
+                        <h3 class="editContent" style="outline: none; cursor: inherit;">
+                            <span class="sub-tittle editContent">Колличество отзывов: {{ technic.comments_set.count }}</span>
+                            Оставить отзыв
+                        </h3>
+                        <form action="{% url 'add_comments_url' technic.id %}" method="post" class="mt-4"
+                              id="formComment">
+                            {% csrf_token %}
+                            <input type="hidden" name="parent" id="contactparent" value="">
+                            <div class="form-group editContent">
+                                <label for="contactcomment" class="editContent">
+                                    Ваш комментарий *
                                 </label>
-                                <input type="text" class="form-control border" name="name"
-                                       id="contactusername" required="">
+                                <textarea class="form-control border" rows="5" name="text"
+                                          id="contactcomment" required=""></textarea>
                             </div>
-                            <div class="col-sm-6 form-group ml-sm-3 editContent">
-                                <label for="contactemail" class="editContent">
-                                    Email *
-                                </label>
-                                <input type="email" class="form-control border" name="email"
-                                       id="contactemail" required="">
+                            <div class="d-sm-flex">
+                                <div class="col-sm-6 form-group p-0 editContent">
+                                    <label for="contactusername" class="editContent">
+                                        Имя *
+                                    </label>
+                                    <input type="text" class="form-control border" name="name"
+                                           id="contactusername" required="">
+                                </div>
+                                <div class="col-sm-6 form-group ml-sm-3 editContent">
+                                    <label for="contactemail" class="editContent">
+                                        Email *
+                                    </label>
+                                    <input type="email" class="form-control border" name="email"
+                                           id="contactemail" required="">
+                                </div>
                             </div>
-                        </div>
-                        <button type="submit" class="mt-3 btn btn-success btn-block py-3">
-                            Отправить
-                        </button>
-                    </form>
+                            <button type="submit" class="mt-3 btn btn-success btn-block py-3">
+                                Отправить
+                            </button>
+                        </form>
+                    </div>
                 </div>
             </div>
-        </div>
-        {% for comment in technic.get_comment %}
+            {% for comment in technic.get_comment %}
             <div class="media py-5">
                 <img src="{% static 'technics/images/te1.jpg' %}" class="mr-3 img-fluid" alt="image">
                 <div class="media-body mt-4">
@@ -172,7 +176,7 @@
                     </p>
                     <a href="#formComment" onclick="addComment('{{comment.name}}', '{{comment.id}}')">Ответить</a>
 
-<!--                    Ответ на родительский комментарий-->
+                    <!--                    Ответ на родительский комментарий-->
                     {% for com in comment.comments_set.all %}
                     <div class="media mt-5 editContent">
                         <a class="pr-3" href="#">
@@ -183,13 +187,13 @@
                             <p class="mt-2 editContent">{{ com.text }}</p>
                         </div>
                     </div>
-                        {% endfor %}
+                    {% endfor %}
                 </div>
             </div>
-        {% endfor %}
+            {% endfor %}
         </div>
     </div>
-<!--            Функция ответа на родительский комментарий-->
+    <!--            Функция ответа на родительский комментарий-->
     <script>
         function addComment(name, id) {
             document.getElementById("contactparent").value = id;
@@ -197,5 +201,6 @@
 
         }
 
+
     </script>
-{% endblock technics %}
+    {% endblock technics %}

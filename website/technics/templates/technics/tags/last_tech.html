@@ -2,11 +2,13 @@
     <h3 class="sear-head editContent">Последние добавленные</h3>
     {% for tech in last_tech %}
         <div class="special-sec1 row mt-3 editContent">
-            <div class="img-deals col-md-4">
-                <a href="{{ tech.get_absolute_url }}" class="editContent">
-                    <img src="{{ tech.photo_main.url }}" class="img-fluid" alt="Фото">
-                </a>
-            </div>
+            {% if tech.photo_main %}
+                <div class="img-deals col-md-4">
+                    <a href="{{ tech.get_absolute_url }}" class="editContent">
+                        <img src="{{ tech.photo_main.url }}" class="img-fluid" alt="Фото">
+                    </a>
+                </div>
+            {% endif %}
             <div class="img-deal1 col-md-4">
                 <a href="{{ tech.get_absolute_url }}" class="editContent">
                     <h3 class="editContent">{{ tech.mark }} {{tech.model }}</h3>

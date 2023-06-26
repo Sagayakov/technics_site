@@ -18,7 +18,5 @@ def get_last_tech(count=5):
     """Достаем последние добавленные объекты модели Technics.
     Передается в last_tech.html"""
 
-    technic = Technics.objects.order_by('id')[::-1][:count]
-    # не поддерживает отрицательный индекс, поэтому сначала развернул список,
-    # а потом уже взял срез
+    technic = Technics.objects.order_by('id')[:count]
     return {'last_tech': technic}

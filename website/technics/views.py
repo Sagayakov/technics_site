@@ -21,6 +21,7 @@ class TechnicsView(CategoryView, ListView):
     model = Technics
     queryset = Technics.objects.filter(is_public=True)
     template_name = 'technics/technics.html'
+    paginate_by = 9
 
 
 class TechnicDetailView(CategoryView, DetailView):
@@ -53,11 +54,34 @@ class FilterTechView(CategoryView, ListView):
     """Фильтр техники"""
 
     template_name = 'technics/technics.html'
+    paginate_by = 6
 
     def get_queryset(self):
         queryset = Technics.objects.filter(
             Q(year__in=self.request.GET.getlist('year')) |
             Q(mark__in=self.request.GET.getlist('mark')) |
             Q(category__in=self.request.GET.getlist('category'))
-        )
+        ).distinct()
         return queryset
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        context['year'] = ''.join([f'year={x}&' for x in self.request.GET.getlist('year')])
+        context['mark'] = ''.join([f'mark={x}&' for x in self.request.GET.getlist('mark')])
+        context['category'] = ''.join([f'category={x}&' for x in self.request.GET.getlist('category')])
+        return context
+
+
+class Search(ListView):
+    """Поиск техники"""
+
+    template_name = 'technics/technics.html'
+    paginate_by = 6
+
+    def get_queryset(self):
+        return Technics.objects.filter(model__icontains=self.request.GET.get('q'))
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        context['q'] = f"q={self.request.GET.get('q')}&"
+        return context

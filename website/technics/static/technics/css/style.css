@@ -841,6 +841,17 @@ li.breadcrumb-item a {
     border: 1px solid #ddd;
 }
 
+.img-about {
+    display: block;
+    margin: 0 auto;
+    margin-top: 50px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    max-width: 100%;
+    height: auto;
+
+}
+
 ul.w3layouts-box-list li {
     list-style: none;
     display: block;

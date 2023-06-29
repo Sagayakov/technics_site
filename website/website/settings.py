@@ -46,7 +46,8 @@ INSTALLED_APPS = [
 
     'ckeditor',
     'ckeditor_uploader',
-    'technics.apps.TechnicsConfig'
+    'technics.apps.TechnicsConfig',
+    'contact.apps.ContactConfig'
 ]
 
 MIDDLEWARE = [

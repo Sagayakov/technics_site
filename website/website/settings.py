@@ -213,3 +213,14 @@ EMAIL_USE_SSL = True
 EMAIL_HOST_USER = os.environ['EMAIL_HOST_USER']  # указать адрес почты example@yandex.ru
 EMAIL_HOST_PASSWORD = os.environ['EMAIL_HOST_PASSWORD']  # указать пароль приложения созданный в акке/безопасность
 
+# Redis
+REDIS_HOST = 'redis'
+REDIS_PORT = '6379'
+CELERY_BROKER_URL = 'redis://' + REDIS_HOST + ':' + REDIS_PORT + '/0'
+CELERY_BROKER_TRANSPORT_OPTIONS = {'visibility_timeout': 3600}
+CELERY_RESULT_BACKEND = 'redis://' + REDIS_HOST + ':' + REDIS_PORT + '/0'
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+
+# CELERY_BROKER_URL = 'redis://redis:6379/0'

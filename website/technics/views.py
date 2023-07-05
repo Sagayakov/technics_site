@@ -9,10 +9,10 @@ from .forms import CommentForm
 
 class CategoryView:
     def get_mark(self):
-        return Mark.objects.all()
+        return Mark.objects.all().order_by('mark')
 
     def get_year(self):
-        return Technics.objects.filter(is_public=True).values('year')
+        return Technics.objects.filter(is_public=True).values('year').order_by('year')
 
 
 class TechnicsView(CategoryView, ListView):

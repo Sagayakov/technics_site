@@ -14,7 +14,7 @@
                 <label for="drop" class="toggle">Menu</label>
                 <input type="checkbox" id="drop">
                 <ul class="menu mt-2">
-                    <li class="active"><a href="">Главная</a></li>
+                    <li class="active"><a href="/">Главная</a></li>
                     <li>
                         <!-- First Tier Drop Down -->
                         <label for="drop-2" class="toggle">Категории <span class="fa fa-angle-down"
@@ -24,13 +24,32 @@
                         <ul>
                             {% get_categories as categories %}
                             {% for category in categories %}
-                            <li><a href="/">{{ category }}</a></li>
+                            <li><a href="{% url 'filter_url' %}?category={{ category.id}}">{{ category }}</a></li>
                             {% endfor %}
                         </ul>
                     </li>
                     <li><a href="/about">Обо мне</a></li>
-                    <li><a href="contact.html"
-                           style="color: rgb(255, 255, 255); font-weight: 700; text-transform: uppercase;">Вход</a></li>
+                    <li>
+                        {% if user.is_authenticated %}
+                            {% get_name as name %}
+                            <a style="color: rgb(255, 255, 255); font-weight: 300; text-transform: uppercase;">
+                                <span>{{ name }} /</span>
+                            </a>
+                            <a href="{% url 'account_logout' %}"
+                               style="color: rgb(255, 255, 255); font-weight: 700; text-transform: uppercase;">
+                                Выход
+                            </a>
+                        {% else %}
+                            <a href="{% url 'account_login' %}"
+                               style="color: rgb(255, 255, 255); font-weight: 700; text-transform: uppercase;">
+                                Вход
+                            </a>
+                            <a href="{% url 'account_signup' %}"
+                               style="color: rgb(255, 255, 255); font-weight: 700; text-transform: uppercase;">
+                                Регистрация
+                            </a>
+                        {% endif %}
+                    </li>
                 </ul>
             </nav>
             <!-- //nav -->

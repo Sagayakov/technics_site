@@ -2,9 +2,14 @@ from django.db.models import Q
 from django.views.generic import ListView, DetailView
 from django.shortcuts import redirect
 from django.views.generic.base import View
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.filters import SearchFilter, OrderingFilter
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.viewsets import ModelViewSet
 
 from .models import Technics, Mark
 from .forms import CommentForm
+from technics.serializers import TechSerializer
 
 
 class CategoryView:
@@ -85,3 +90,15 @@ class Search(ListView):
         context = super().get_context_data(*args, **kwargs)
         context['q'] = f"q={self.request.GET.get('q')}&"
         return context
+
+
+class TechViewSet(ModelViewSet):
+    """sdf"""
+
+    queryset = Technics.objects.all()
+    serializer_class = TechSerializer
+    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
+    permission_classes = [IsAuthenticated]
+    filterset_fields = ['price']
+    search_fields = ['description', 'small_description']
+    ordering_fields = ['price', 'model', 'category']

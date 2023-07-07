@@ -5,7 +5,9 @@ from django.urls import reverse
 
 
 class Category(models.Model):
-    """Какой вид техники. Ноутбук/пк или др"""
+    """Какой вид техники. Ноутбук/пк или др
+    slug автоматически заполняется в админ панели,
+    здесь не стал забивать функциями"""
 
     category = models.CharField(max_length=50, verbose_name='Категория')
     slug = models.SlugField(blank=True, db_index=True, unique=True, verbose_name='Ссылка')
@@ -19,7 +21,9 @@ class Category(models.Model):
 
 
 class Mark(models.Model):
-    """Марка техники. Samsung/lg etc"""
+    """Марка техники. Samsung/lg etc
+    slug автоматически заполняется в админ панели,
+    здесь не стал забивать функциями"""
 
     mark = models.CharField(max_length=50, verbose_name='Марка')
     slug = models.SlugField(null=True, db_index=True, unique=True, verbose_name='Ссылка')
@@ -38,6 +42,7 @@ class Technics(models.Model):
     category = models.ForeignKey(Category, on_delete=models.PROTECT, verbose_name='Категория')
     mark = models.ForeignKey(Mark, on_delete=models.PROTECT, verbose_name='Марка')
     model = models.CharField(max_length=25, validators=[MinLengthValidator(2)], verbose_name='Модель')
+    price = models.PositiveSmallIntegerField(default=0, verbose_name='Цена')
     small_description = models.CharField(max_length=200, default='', verbose_name='Краткое описание')
     description = models.TextField(default='', verbose_name='Описание')
     photo_main = models.ImageField(upload_to='photos/technics', verbose_name='Фото', null=True, blank=True)
@@ -57,7 +62,6 @@ class Technics(models.Model):
         return self.comments_set.filter(parent__isnull=True)
 
     def save(self, *args, **kwargs):
-        super().save(*args, **kwargs)
         if not self.slug:
             self.slug = slugify(self.category) + '_' + slugify(self.mark) + '_' + slugify(self.model)
         super().save(*args, **kwargs)

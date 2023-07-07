@@ -226,6 +226,15 @@ CKEDITOR_CONFIGS = {
 
 SITE_ID = 1
 
+REST_FRAMEWORK = {
+    'DEFAULT_RENDERER_CLASSES': (
+        'rest_framework.renderers.JSONRenderer',
+    ),
+    'DEFAULT_PARSER_CLASSES': (
+        'rest_framework.parsers.JSONParser',
+    )
+}
+
 # EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend' # запуск в консоли
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 

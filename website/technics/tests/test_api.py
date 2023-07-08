@@ -8,6 +8,9 @@ from technics.serializers import TechSerializer
 
 class TechApiTestCase(APITestCase):
 
+    from technics.views import TechViewSet
+    TechViewSet.permission_classes = []
+
     def setUp(self):
         self.mark_1 = Mark.objects.create(mark='Mark1', slug='mark1')
         self.mark_2 = Mark.objects.create(mark='Mark2', slug='mark2')
@@ -69,4 +72,4 @@ class TechApiTestCase(APITestCase):
 
 # copypaste
 # coverage run --source='technics' manage.py test technics.tests
-# python manage.py test technics.tests.test_serializers
+# python manage.py test technics.tests.test_api

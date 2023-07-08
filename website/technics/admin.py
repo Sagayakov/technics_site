@@ -16,6 +16,7 @@ class TechAdminForm(forms.ModelForm):
         fields = '__all__'
 
 
+
 @admin.register(PhotoTech)
 class PhotoTechAdmin(admin.ModelAdmin):
     """Фотографии к моделе Tech"""

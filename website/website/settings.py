@@ -44,12 +44,13 @@ INSTALLED_APPS = [
 
     'ckeditor',
     'ckeditor_uploader',
-    'technics.apps.TechnicsConfig',
-    'contact.apps.ContactConfig',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
-    'allauth.socialaccount.providers.vk'
+    'allauth.socialaccount.providers.vk',
+
+    'technics.apps.TechnicsConfig',
+    'contact.apps.ContactConfig',
 ]
 
 MIDDLEWARE = [

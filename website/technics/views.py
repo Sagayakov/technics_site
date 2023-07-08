@@ -13,6 +13,8 @@ from technics.serializers import TechSerializer
 
 
 class CategoryView:
+    """Достает объекты модели"""
+
     def get_mark(self):
         return Mark.objects.all().order_by('mark')
 
@@ -93,7 +95,7 @@ class Search(ListView):
 
 
 class TechViewSet(ModelViewSet):
-    """sdf"""
+    """Сериализатор"""
 
     queryset = Technics.objects.all()
     serializer_class = TechSerializer

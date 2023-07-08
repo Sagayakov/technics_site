@@ -89,6 +89,8 @@ class Comments(models.Model):
 
 
 class PhotoTech(models.Model):
+    """Фотографии к основной моделе Technics"""
+
     technic = models.ForeignKey(Technics, on_delete=models.CASCADE, verbose_name='Техника')
     image = models.ImageField(blank=True, upload_to='photos/technics', verbose_name='Фото')
     title = models.TextField(verbose_name='Описание', default=f'', null=True, blank=True)

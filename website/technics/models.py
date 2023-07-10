@@ -48,6 +48,7 @@ class Technics(models.Model):
     photo_main = models.ImageField(upload_to='photos/technics', verbose_name='Фото', null=True, blank=True)
     year = models.PositiveSmallIntegerField(null=True, blank=True, verbose_name='Год выпуска')
     slug = models.SlugField(blank=True, null=True, db_index=True, unique=True, verbose_name='Ссылка')
+    youtube = models.CharField(max_length=50, help_text='https://www.youtube.com/watch?v=PcIUnpSwhFk')
     is_public = models.BooleanField(default=True, verbose_name='Публикация')
     date_create = models.DateTimeField(auto_now_add=True)
     date_update = models.DateTimeField(auto_now=True)
@@ -65,6 +66,14 @@ class Technics(models.Model):
         if not self.slug:
             self.slug = slugify(self.category) + '_' + slugify(self.mark) + '_' + slugify(self.model)
         super().save(*args, **kwargs)
+
+    def get_youtube_link(self):
+        try:
+            you = self.youtube.split('?v=')[1]
+            return str(you)
+        except:
+            return '0lEaKZhCN-E'
+
 
     class Meta:
         verbose_name = "Техника"

@@ -26,7 +26,7 @@ class TechnicsView(CategoryView, ListView):
     """Список всей техники"""
 
     model = Technics
-    queryset = Technics.objects.filter(is_public=True)
+    queryset = Technics.objects.filter(is_public=True).order_by('-price')
     template_name = 'technics/technics.html'
     paginate_by = 9
 

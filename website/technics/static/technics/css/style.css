@@ -1682,3 +1682,22 @@ a.move-top span {
 @media(max-width:320px) {}
 
 /*--//responsive--*/
+
+.pagination {
+  text-align: center;
+}
+
+.pagination .pagination__item {
+  display: inline-block;
+  margin: 0 5px;
+}
+
+.pagination .pagination__item a {
+  color: black;
+  font-size: 16px;
+  text-decoration: none;
+}
+
+.pagination .pagination__item.active a {
+  font-weight: bold;
+}

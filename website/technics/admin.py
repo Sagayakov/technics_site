@@ -54,7 +54,7 @@ class TechnicAdmin(admin.ModelAdmin):
     """Основная модель техники"""
 
     list_display = ['id', 'category', 'mark', 'model', 'get_photo', 'is_public']
-    fields = ['id', 'category', 'get_photo', 'mark', 'model', 'small_description',
+    fields = ['id', 'category', 'get_photo', 'mark', 'model', 'price', 'small_description',
               'description', 'photo_main', 'year', 'slug', 'youtube', 'is_public',
               'date_create', 'date_update']
     readonly_fields = ['id', 'date_create', 'date_update', 'get_photo']

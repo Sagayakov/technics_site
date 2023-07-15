@@ -1,4 +1,7 @@
+import json
+
 from django.urls import reverse
+from django.contrib.auth.models import User
 from rest_framework.test import APITestCase
 from rest_framework import status
 
@@ -7,11 +10,13 @@ from technics.serializers import TechSerializer
 
 
 class TechApiTestCase(APITestCase):
-
-    from technics.views import TechViewSet
-    TechViewSet.permission_classes = []
+    """Тестирование API"""
 
     def setUp(self):
+        """Создаем объекты используемые во всем классе"""
+
+        self.user = User.objects.create(username='Test_user')
+
         self.mark_1 = Mark.objects.create(mark='Mark1', slug='mark1')
         self.mark_2 = Mark.objects.create(mark='Mark2', slug='mark2')
 
@@ -50,6 +55,8 @@ class TechApiTestCase(APITestCase):
         )
 
     def test_get(self):
+        """Сравниваем созданные объекты с получаемыми"""
+
         url = reverse('tech-list')
         response = self.client.get(url)
         serializer_data = TechSerializer([self.technic_1, self.technic_2, self.technic_3], many=True).data
@@ -57,6 +64,8 @@ class TechApiTestCase(APITestCase):
         self.assertEqual(serializer_data, response.data)
 
     def test_get_search(self):
+        """Проверяем работу поиска по слову Ключевое, ищем в описании"""
+
         url = reverse('tech-list')
         response = self.client.get(url, data={'search': 'ключевое'})
         serializer_data = TechSerializer([self.technic_2, self.technic_3], many=True).data
@@ -64,11 +73,70 @@ class TechApiTestCase(APITestCase):
         self.assertEqual(serializer_data, response.data)
 
     def test_get_filter(self):
+        """Проверяем фильтрацию по цене"""
+
         url = reverse('tech-list')
         response = self.client.get(url, data={'price': 1000})
         serializer_data = TechSerializer([self.technic_1], many=True).data
         self.assertEqual(status.HTTP_200_OK, response.status_code)
         self.assertEqual(serializer_data, response.data)
+
+    def test_tech_create(self):
+        """Проверяем создание нового объекта"""
+
+        self.assertEqual(3, Technics.objects.all().count())
+
+        url = reverse('tech-list')
+        data = {
+            "model": "Postman",
+            "youtube": "www.youtube.com",
+            "category": self.category_1.pk,
+            "mark": self.mark_1.pk,
+            "description": "desc",
+            "small_description": "small"
+        }
+        json_data = json.dumps(data)
+        self.client.force_login(self.user)
+        response = self.client.post(url, data=json_data, content_type='application/json')
+
+        self.assertEqual(status.HTTP_201_CREATED, response.status_code)
+        self.assertEqual(4, Technics.objects.all().count())
+
+    def test_tech_update(self):
+        """Обновляем первый объект и проверяем его данные"""
+
+        url = reverse('tech-detail', args=(self.technic_1.id,))
+        data = {
+            "model": "Postman Edit",
+            "youtube": "www.youtube.com",
+            "category": self.category_1.pk,
+            "mark": self.mark_1.pk,
+            "description": "desc",
+            "small_description": "small"
+        }
+        json_data = json.dumps(data)
+        self.client.force_login(self.user)
+        response = self.client.put(url, data=json_data, content_type='application/json')
+
+        self.technic_1.refresh_from_db()  # обновление объекта, долго промучился.
+        # Объект обновился, а используется старый. Здесь принудительно обновляется.
+
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+        self.assertEqual("Postman Edit", self.technic_1.model)
+        self.assertEqual("www.youtube.com", self.technic_1.youtube)
+        self.assertEqual("desc", self.technic_1.description)
+
+    def test_tech_delete(self):
+        """Проверка удаления объекта"""
+
+        count = Technics.objects.all().count()
+        url = reverse('tech-detail', args=(self.technic_1.id,))
+
+        self.client.force_login(self.user)
+        response = self.client.delete(url, content_type='application/json')
+
+        self.assertEqual(count - 1, Technics.objects.all().count())
+        self.assertEqual(status.HTTP_204_NO_CONTENT, response.status_code)
 
 # copypaste
 # coverage run --source='technics' manage.py test technics.tests

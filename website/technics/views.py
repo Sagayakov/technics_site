@@ -19,7 +19,7 @@ class CategoryView:
         return Mark.objects.all().order_by('mark')
 
     def get_year(self):
-        return Technics.objects.filter(is_public=True).values('year').order_by('year')
+        return Technics.objects.filter(is_public=True).values('year').order_by('year').distinct()
 
 
 class TechnicsView(CategoryView, ListView):

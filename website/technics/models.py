@@ -42,7 +42,7 @@ class Technics(models.Model):
     category = models.ForeignKey(Category, on_delete=models.PROTECT, verbose_name='Категория')
     mark = models.ForeignKey(Mark, on_delete=models.PROTECT, verbose_name='Марка')
     model = models.CharField(max_length=25, validators=[MinLengthValidator(2)], verbose_name='Модель')
-    price = models.PositiveSmallIntegerField(default=0, verbose_name='Цена')
+    price = models.PositiveIntegerField(default=0, verbose_name='Цена')
     small_description = models.CharField(max_length=200, default='', verbose_name='Краткое описание')
     description = models.TextField(default='', verbose_name='Описание')
     photo_main = models.ImageField(upload_to='photos/technics', verbose_name='Фото', null=True, blank=True)

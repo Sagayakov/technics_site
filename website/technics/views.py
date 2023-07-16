@@ -4,12 +4,12 @@ from django.shortcuts import redirect
 from django.views.generic.base import View
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter, OrderingFilter
-from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
 
 from .models import Technics, Mark
 from .forms import CommentForm
-from technics.serializers import TechSerializer
+from .serializers import TechSerializer
+from .permissions import IsOwnerOrAdminOrReadOnly
 
 
 class CategoryView:
@@ -100,7 +100,13 @@ class TechViewSet(ModelViewSet):
     queryset = Technics.objects.all()
     serializer_class = TechSerializer
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsOwnerOrAdminOrReadOnly]
     filterset_fields = ['price']
     search_fields = ['description', 'small_description']
     ordering_fields = ['price', 'model', 'category']
+
+    def perform_create(self, serializer):
+        """Добавление создателя в модель Technics"""
+
+        serializer.validated_data['owner'] = self.request.user
+        serializer.save()

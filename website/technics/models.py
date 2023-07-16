@@ -2,6 +2,7 @@ from django.db import models
 from pytils.translit import slugify
 from django.core.validators import MinLengthValidator
 from django.urls import reverse
+from django.contrib.auth.models import User
 
 
 class Category(models.Model):
@@ -52,6 +53,7 @@ class Technics(models.Model):
     is_public = models.BooleanField(default=True, verbose_name='Публикация')
     date_create = models.DateTimeField(auto_now_add=True)
     date_update = models.DateTimeField(auto_now=True)
+    owner = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, verbose_name='Создатель модели')
 
     def __str__(self):
         return f'{self.mark} - {self.model}'

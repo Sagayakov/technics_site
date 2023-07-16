@@ -31,7 +31,8 @@ class TechApiTestCase(APITestCase):
             price=1000,
             small_description='Техника1',
             description='Описание полное для техники1',
-            is_public=True
+            is_public=True,
+            owner=self.user
         )
         self.technic_2 = Technics.objects.create(
             category=self.category_2,
@@ -101,6 +102,7 @@ class TechApiTestCase(APITestCase):
 
         self.assertEqual(status.HTTP_201_CREATED, response.status_code)
         self.assertEqual(4, Technics.objects.all().count())
+        self.assertEqual(self.user, Technics.objects.last().owner)
 
     def test_tech_update(self):
         """Обновляем первый объект и проверяем его данные"""
@@ -115,7 +117,7 @@ class TechApiTestCase(APITestCase):
             "small_description": "small"
         }
         json_data = json.dumps(data)
-        self.client.force_login(self.user)
+        self.client.force_login(self.user) # авторизация юзера
         response = self.client.put(url, data=json_data, content_type='application/json')
 
         self.technic_1.refresh_from_db()  # обновление объекта, долго промучился.
@@ -137,6 +139,56 @@ class TechApiTestCase(APITestCase):
 
         self.assertEqual(count - 1, Technics.objects.all().count())
         self.assertEqual(status.HTTP_204_NO_CONTENT, response.status_code)
+
+    def test_tech_update_not_owner(self):
+        """Обновляем данные юзером не создателем объекта, доступа у него нет.
+        Данные меняться не должны. Доступ с кодом 403"""
+
+        self.user_2 = User.objects.create(username='Test_user_2')
+        url = reverse('tech-detail', args=(self.technic_1.id,))
+        data = {
+            "model": "Postman Edit",
+            "youtube": "www.youtube.com",
+            "category": self.category_1.pk,
+            "mark": self.mark_1.pk,
+            "description": "desc",
+            "small_description": "small"
+        }
+        json_data = json.dumps(data)
+        self.client.force_login(self.user_2) # авторизация юзера
+        response = self.client.put(url, data=json_data, content_type='application/json')
+
+        self.technic_1.refresh_from_db()  # обновление объекта, долго промучился.
+        # Объект обновился, а используется старый. Здесь принудительно обновляется.
+
+        self.assertEqual(status.HTTP_403_FORBIDDEN, response.status_code)
+        self.assertEqual("Technic1", self.technic_1.model)
+        self.assertEqual("Описание полное для техники1", self.technic_1.description)
+
+    def test_tech_update_admin(self):
+        """Обновляем данные юзером не создателем объекта, но админом.
+        Доступ к изменению чужих данных есть"""
+
+        self.user_2 = User.objects.create(username='Test_user_2', is_staff=True)
+        url = reverse('tech-detail', args=(self.technic_1.id,))
+        data = {
+            "model": "Postman Edit",
+            "youtube": "www.youtube.com",
+            "category": self.category_1.pk,
+            "mark": self.mark_1.pk,
+            "description": "desc",
+            "small_description": "small"
+        }
+        json_data = json.dumps(data)
+        self.client.force_login(self.user_2)  # авторизация юзера
+        response = self.client.put(url, data=json_data, content_type='application/json')
+
+        self.technic_1.refresh_from_db()  # обновление объекта, долго промучился.
+        # Объект обновился, а используется старый. Здесь принудительно обновляется.
+
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+        self.assertEqual("Postman Edit", self.technic_1.model)
+        self.assertEqual("desc", self.technic_1.description)
 
 # copypaste
 # coverage run --source='technics' manage.py test technics.tests

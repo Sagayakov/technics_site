@@ -4,11 +4,13 @@ from django.shortcuts import redirect
 from django.views.generic.base import View
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter, OrderingFilter
-from rest_framework.viewsets import ModelViewSet
+from rest_framework.mixins import UpdateModelMixin
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.viewsets import ModelViewSet, GenericViewSet
 
-from .models import Technics, Mark
+from .models import Technics, Mark, UserTechRelation
 from .forms import CommentForm
-from .serializers import TechSerializer
+from .serializers import TechSerializer, UserTechRelationSerializer
 from .permissions import IsOwnerOrAdminOrReadOnly
 
 
@@ -95,7 +97,7 @@ class Search(ListView):
 
 
 class TechViewSet(ModelViewSet):
-    """Сериализатор"""
+    """API Technics"""
 
     queryset = Technics.objects.all()
     serializer_class = TechSerializer
@@ -106,7 +108,21 @@ class TechViewSet(ModelViewSet):
     ordering_fields = ['price', 'model', 'category']
 
     def perform_create(self, serializer):
-        """Добавление создателя в модель Technics"""
+        """Добавление юзера-создателя в объект модели Technics"""
 
         serializer.validated_data['owner'] = self.request.user
         serializer.save()
+
+
+class UserTechRelationView(UpdateModelMixin, GenericViewSet):
+    """API UserTechRelation"""
+
+    permission_classes = [IsAuthenticated]
+    queryset = UserTechRelation.objects.all()
+    serializer_class = UserTechRelationSerializer
+    lookup_field = 'tech'
+
+    def get_object(self):
+        obj, _ = UserTechRelation.objects.get_or_create(user=self.request.user,
+                                                        technics_id=self.kwargs['tech'])
+        return obj

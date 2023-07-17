@@ -1,6 +1,6 @@
 from rest_framework.serializers import ModelSerializer
 
-from technics.models import Technics, Mark, Category
+from technics.models import Technics, Mark, Category, UserTechRelation
 
 
 class TechSerializer(ModelSerializer):
@@ -19,3 +19,9 @@ class CategorySerializer(ModelSerializer):
     class Meta:
         model = Category
         fields = '__all__'
+
+
+class UserTechRelationSerializer(ModelSerializer):
+    class Meta:
+        model = UserTechRelation
+        fields = ('technics', 'like', 'in_bookmarks', 'rating')

@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 from rest_framework.test import APITestCase
 from rest_framework import status
 
-from technics.models import Technics, Mark, Category
+from technics.models import Technics, Mark, Category, UserTechRelation
 from technics.serializers import TechSerializer
 
 
@@ -189,6 +189,78 @@ class TechApiTestCase(APITestCase):
         self.assertEqual(status.HTTP_200_OK, response.status_code)
         self.assertEqual("Postman Edit", self.technic_1.model)
         self.assertEqual("desc", self.technic_1.description)
+
+
+class TechRelationTestCase(APITestCase):
+    """Тестирование API User Tech Relation"""
+
+    def setUp(self):
+        """Создаем объекты используемые во всем классе"""
+
+        self.user_1 = User.objects.create(username='Test_user')
+        self.user_2 = User.objects.create(username='Test_user_2')
+
+
+        self.mark_1 = Mark.objects.create(mark='Mark1', slug='mark1')
+        self.mark_2 = Mark.objects.create(mark='Mark2', slug='mark2')
+
+        self.category_1 = Category.objects.create(category='Category1', slug='category1')
+        self.category_2 = Category.objects.create(category='Category2', slug='category2')
+
+        self.technic_1 = Technics.objects.create(
+            category=self.category_1,
+            mark=self.mark_1,
+            model='Technic1',
+            year=2020,
+            price=1000,
+            small_description='Техника1',
+            description='Описание полное для техники1',
+            is_public=True,
+            owner=self.user_1
+        )
+        self.technic_2 = Technics.objects.create(
+            category=self.category_2,
+            mark=self.mark_2,
+            model='Technic2',
+            year=2022,
+            price=100,
+            small_description='Техника2',
+            description='Описание полное для техники2. Ключевое слово',
+            is_public=True
+        )
+
+    def test_relation(self):
+        """Сравниваем связь юзера с объектами модели Technics"""
+
+        url = reverse('usertechrelation-detail', args=(self.technic_1.id,))
+        data = {
+            "like": True,
+            "in_bookmarks": True,
+            "rating": 4
+        }
+        json_data = json.dumps(data)
+        self.client.force_login(self.user_1)
+        response = self.client.patch(url, data=json_data, content_type='application/json')
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+        relation = UserTechRelation.objects.get(user=self.user_1, technics=self.technic_1)
+        self.assertTrue(relation.like)
+        self.assertTrue(relation.in_bookmarks)
+        self.assertEqual(4, relation.rating)
+
+    def test_relation_wrong(self):
+        """Сравниваем связь юзера с объектами модели Technics передавая не валидное значение"""
+
+        url = reverse('usertechrelation-detail', args=(self.technic_1.id,))
+        data = {
+            "like": True,
+            "in_bookmarks": True,
+            "rating": 7
+        }
+        json_data = json.dumps(data)
+        self.client.force_login(self.user_1)
+        response = self.client.patch(url, data=json_data, content_type='application/json')
+        self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code, response.data)
+
 
 # copypaste
 # coverage run --source='technics' manage.py test technics.tests

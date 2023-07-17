@@ -23,10 +23,12 @@ from rest_framework.routers import SimpleRouter
 from django.views.static import serve as mediaserve
 
 
-from technics.views import TechViewSet
+from technics.views import TechViewSet, UserTechRelationView
 
 router = SimpleRouter()
 router.register(r'tech', TechViewSet, basename='tech')
+router.register(r'tech_relation', UserTechRelationView)
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),

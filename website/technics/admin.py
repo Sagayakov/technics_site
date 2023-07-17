@@ -119,3 +119,9 @@ class CategoryAdmin(admin.ModelAdmin):
     """Категория техники. Ноут/ПК или др"""
 
     prepopulated_fields = {'slug': ('category',)}
+
+
+@admin.register(UserTechRelation)
+class UserTechRelationAdmin(admin.ModelAdmin):
+    """"""
+    pass

@@ -53,7 +53,10 @@ class Technics(models.Model):
     is_public = models.BooleanField(default=True, verbose_name='Публикация')
     date_create = models.DateTimeField(auto_now_add=True)
     date_update = models.DateTimeField(auto_now=True)
-    owner = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, verbose_name='Создатель модели')
+    owner = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='my_tech',
+                              verbose_name='Создатель модели')
+    clients = models.ManyToManyField(User, through='UserTechRelation', related_name='client_tech',
+                                     verbose_name='Взаимодействия')
 
     def __str__(self):
         return f'{self.mark} - {self.model}'
@@ -75,6 +78,14 @@ class Technics(models.Model):
             return str(you)
         except:
             return '0lEaKZhCN-E'
+
+    def get_rating(self):
+        user_tech_relations = self.usertechrelation_set.filter(technics=self)
+        if user_tech_relations.exists():
+            total_rating = sum(user_tech_relations.values_list('rating', flat=True))
+            average_rating = total_rating / user_tech_relations.count()
+            return average_rating
+        return "Еще нет"
 
 
     class Meta:
@@ -108,3 +119,31 @@ class PhotoTech(models.Model):
 
     def __str__(self):
         return self.title
+
+    class Meta:
+        verbose_name = "Доп фото Tech"
+        verbose_name_plural = "Доп фото Tech"
+
+
+class UserTechRelation(models.Model):
+    """Связь юзера с объектом модели Technics"""
+
+    RATING_CHOICES = (
+        (1, 1),
+        (2, 2),
+        (3, 3),
+        (4, 4),
+        (5, 5)
+    )
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    technics = models.ForeignKey(Technics, on_delete=models.CASCADE)
+    like = models.BooleanField(default=False, verbose_name='Лайк')
+    in_bookmarks = models.BooleanField(default=False, verbose_name='Закладка')
+    rating = models.PositiveSmallIntegerField(choices=RATING_CHOICES, null=True)
+
+    def __str__(self):
+        return f'{self.user}: {self.technics}, rating {self.rating}'
+
+    class Meta:
+        verbose_name = "Взаимодействие пользователя"
+        verbose_name_plural = "Взаимодействия пользователей"

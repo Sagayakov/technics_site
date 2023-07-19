@@ -79,3 +79,22 @@ class TechSerializerTestCase(TestCase):
             }
         ]
         self.assertEqual(expected_data, data)
+
+    def test_relation(self):
+        user_1 = User.objects.create(username='user_1')
+        user_2 = User.objects.create(username='user_2')
+        user_3 = User.objects.create(username='user_3')
+
+        UserTechRelation.objects.create(
+            user=user_1, technics=self.technic_1, like=True, in_bookmarks=True, rating=4
+        )
+        UserTechRelation.objects.create(
+            user=user_2, technics=self.technic_1, like=True, in_bookmarks=True, rating=3
+        )
+        UserTechRelation.objects.create(
+            user=user_3, technics=self.technic_3, like=True, in_bookmarks=True, rating=2
+        )
+        serializer = TechSerializer(self.technic_1)
+        self.assertTrue(UserTechRelation.objects.filter(user=user_1, technics=self.technic_1).exists())
+        self.assertEqual(2, serializer.data['likes_count'])
+

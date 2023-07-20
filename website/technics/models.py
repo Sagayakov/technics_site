@@ -79,15 +79,6 @@ class Technics(models.Model):
         except:
             return '0lEaKZhCN-E'
 
-    def get_rating(self):
-        user_tech_relations = self.usertechrelation_set.filter(technics=self)
-        if user_tech_relations.exists():
-            total_rating = sum(user_tech_relations.values_list('rating', flat=True))
-            average_rating = total_rating / user_tech_relations.count()
-            return average_rating
-        return "Еще нет"
-
-
     class Meta:
         verbose_name = "Техника"
         verbose_name_plural = "Техника"

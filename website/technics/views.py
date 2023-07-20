@@ -126,3 +126,14 @@ class UserTechRelationView(UpdateModelMixin, GenericViewSet):
         obj, _ = UserTechRelation.objects.get_or_create(user=self.request.user,
                                                         technics_id=self.kwargs['tech'])
         return obj
+
+
+def post_rating(request, pk):
+    """Изменение лайка на объекте модели Technics"""
+
+    user = request.user
+    technic = Technics.objects.get(id=pk)
+    user_tech_relation, _ = UserTechRelation.objects.get_or_create(user=user, technics=technic)
+    user_tech_relation.like = not user_tech_relation.like
+    user_tech_relation.save()
+    return redirect(technic.get_absolute_url())

@@ -1701,3 +1701,21 @@ a.move-top span {
 .pagination .pagination__item.active a {
   font-weight: bold;
 }
+
+.like-button {
+  display: inline-block;
+  padding: 5px 10px;
+  border: 1px solid #ccc;
+  background-color: #fff;
+  color: #333;
+  cursor: pointer;
+}
+
+.like-button:hover {
+  background-color: #eee;
+}
+
+.like-button.liked {
+  background-color: #f54157;
+  color: #fff;
+}

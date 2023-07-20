@@ -41,7 +41,7 @@
                         </li>
                         <li style="list-style: none">
                             <a href="#"><b>Цена:</b>
-                                {{ technic.price }}
+                                {{ technic.price }} $
 <!--                                Шаблоны для вывода рейтинга-->
 <!--                                <span class="fa fa-star" aria-hidden="true"&ndash;&gt;-->
 <!--                                      style="outline: none; cursor: inherit;"></span>-->
@@ -87,6 +87,18 @@
                                                           style="outline: none; cursor: inherit;"></span>
                                         </a>
                                     </li>
+                                    {% if user.is_authenticated %}
+                                        {% get_user_like technic.id as technic_like %}
+                                        <li style="list-style: none">
+                                            <form method="post" action="{% url 'add_ratings_url' technic.id %}">
+                                                {% csrf_token %}
+                                                <input type="hidden" name="additional_data" value="your_additional_data_here">
+                                                <button type="submit" class="like-button {% if technic_like %}liked{% endif %}">Like</button>
+                                            </form>
+                                        </li>
+                                    {% else %}
+                                        <button type="button" class="disabled-button" disabled title="Зайдите под своим логином и паролем">Like</button>
+                                    {% endif %}
                                 </ul>
                             </div>
                             <div class="clearfix"></div>
@@ -99,6 +111,8 @@
 
                 <h3 class="shop-sing editContent" style="outline: none; cursor: inherit;">
                     Краткое описание {{ technic.small_description }}
+                    {% get_tech_rating technic.id as technic_rating %}
+                    {{ technic_rating }}
                 </h3>
                 <p>
                     {% for photo in technic.phototech_set.all %}

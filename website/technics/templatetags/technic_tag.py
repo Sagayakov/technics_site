@@ -68,6 +68,7 @@ def get_user_like(context, tech_id):
     except UserTechRelation.DoesNotExist:
         return False
 
+
 @register.simple_tag(takes_context=True)
 def get_user_rating(context, tech_id):
     """Вывод рейтинга на объекте моделе Technics установленный юзером"""

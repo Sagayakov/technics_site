@@ -6,21 +6,18 @@ To start the backend, follow these steps:
 2. Install all project's requirements by running the following command:
 
 ```
-python
 pip install -r requirements.txt
 ```
 
 3. Apply database migrations with the following command:
 
 ```
-python
 python3 manage.py migrate
 ```
 
 4. Create a superuser by running the command:
 
 ```
-python
 python3 manage.py createsuperuser
 ```
 
@@ -28,7 +25,6 @@ Follow the instructions to enter a login and password for your superuser.
 
 5. Finally, start the local server by running the command:
 ```
-python
 python3 manage.py runserver
 ```
    

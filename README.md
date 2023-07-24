@@ -1,15 +1,26 @@
-Site resume
-Start a backend
-1. After cloning this repo, open the terminal and install all project's requirements with help of this command:
+# Site resume
+
+To start the backend, follow these steps:
+
+1. Clone this repository and open the terminal.
+2. Install all project's requirements by running the following command:
 pip install -r requirements.txt
-2. Run the next command to apply db migrations:
+
+3. Apply database migrations with the following command:
 python manage.py migrate
-3. Create a superuser using next command:
+
+4. Create a superuser by running the command:
 python manage.py createsuperuser
-Follow the instructions and enter login and password for your superuser.
-4. Finally, to start a local server, run the next command:
+Follow the instructions to enter a login and password for your superuser.
+
+5. Finally, start the local server by running the command:
 python manage.py runserver
-- This will start a Django backend server at http://localhost:8000/
-- To access API, go to http://localhost:8000/tech/
-- To access API communication between objects http://localhost:8000/tech_relation/1/
-- To access Django admin page, go to http://localhost:8000/admin/
+
+This will start a Django backend server at [http://localhost:8000/](http://localhost:8000/).
+
+To access the API:
+- Go to [http://localhost:8000/tech/](http://localhost:8000/tech/) to access the API.
+- Go to [http://localhost:8000/tech_relation/1/](http://localhost:8000/tech_relation/1/) to access the API communication between objects.
+
+To access the Django admin page:
+- Go to [http://localhost:8000/admin/](http://localhost:8000/admin/).

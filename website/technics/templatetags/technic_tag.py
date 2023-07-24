@@ -43,14 +43,14 @@ def get_name(context):
 
 @register.simple_tag
 def get_tech_rating(tech_id):
-    """Рейтинг объекта модели Technics"""
+    """Средний рейтинг объекта модели Technics"""
 
     try:
         technics = Technics.objects.get(id=tech_id)
         rating = technics.usertechrelation_set.aggregate(average_rating=Avg('rating'))['average_rating']
         if rating is None:
             return 'Рейтинг не установлен'
-        return rating
+        return round(rating, 2)
     except Technics.DoesNotExist:
         return "Рейтинг не установлен"
 
@@ -65,5 +65,18 @@ def get_user_like(context, tech_id):
     try:
         user_tech_relation = UserTechRelation.objects.get(user=user, technics=technics)
         return user_tech_relation.like
+    except UserTechRelation.DoesNotExist:
+        return False
+
+@register.simple_tag(takes_context=True)
+def get_user_rating(context, tech_id):
+    """Вывод рейтинга на объекте моделе Technics установленный юзером"""
+
+    request = context['request']
+    user = request.user
+    technics = Technics.objects.get(id=tech_id)
+    try:
+        user_tech_relation = UserTechRelation.objects.get(user=user, technics=technics)
+        return user_tech_relation.rating
     except UserTechRelation.DoesNotExist:
         return False

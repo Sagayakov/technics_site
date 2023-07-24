@@ -128,7 +128,7 @@ class UserTechRelationView(UpdateModelMixin, GenericViewSet):
         return obj
 
 
-def post_rating(request, pk):
+def post_like(request, pk):
     """Изменение лайка на объекте модели Technics"""
 
     user = request.user
@@ -137,3 +137,16 @@ def post_rating(request, pk):
     user_tech_relation.like = not user_tech_relation.like
     user_tech_relation.save()
     return redirect(technic.get_absolute_url())
+
+
+def post_rating(request, pk):
+    if request.method == 'POST':
+        rating = request.POST.get('rating')
+        if rating:
+            user = request.user
+            technic = Technics.objects.get(id=pk)
+            user_tech_relation, _ = UserTechRelation.objects.get_or_create(user=user, technics=technic)
+            user_tech_relation.rating = rating
+            user_tech_relation.save()
+            return redirect(technic.get_absolute_url())
+    return redirect('/')

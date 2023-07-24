@@ -1719,3 +1719,31 @@ a.move-top span {
   background-color: #f54157;
   color: #fff;
 }
+
+#ratingForm {
+  display: flex;
+  align-items: center;
+}
+
+#ratingForm span {
+  cursor: pointer;
+  padding: 5px;
+  margin-right: 5px;
+  font-size: 18px;
+
+}
+
+#ratingForm span:hover,
+#ratingForm span.selected {
+  background-color: #e0e0e0;
+}
+
+#ratingForm .ratingButton.selected {
+  background-color: #e0e0e0;
+}
+
+.price-item {
+  font-weight: bold;
+  font-size: 28px;
+  color: #53b94f;
+}

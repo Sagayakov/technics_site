@@ -24,10 +24,25 @@ python3 manage.py createsuperuser
 Follow the instructions to enter a login and password for your superuser.
 
 5. Finally, start the local server by running the command:
+
 ```
 python3 manage.py runserver
 ```
-   
+
+____  
+**OR**
+1. To build the Docker container, run the following command:
+
+```
+docker-compose build
+```
+
+2. To start the Docker container, run the following command:
+
+```commandline
+docker-compose up
+```
+
 This will start a Django backend server at [http://localhost:8000/](http://localhost:8000/) <br>
 Note: Use `python3` on Unix systems and `python` on Windows.
 

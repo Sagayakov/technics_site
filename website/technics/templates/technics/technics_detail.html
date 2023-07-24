@@ -40,24 +40,49 @@
                             <span><b>О моделе:</b> {{ technic.small_description }} </span>
                         </li>
                         <li style="list-style: none">
-                            <a href="#"><b>Цена:</b>
+                            {% if user.is_authenticated %}
+                                <form id="ratingForm" action="{% url 'add_rating_url' technic.pk %}" method="post">
+                                {% csrf_token %}
+                                  <label for="rating"><b>Рейтинг:</b></label>
+                                    {% get_user_rating technic.id as technic_rating %}
+
+                                    <span class="ratingButton {% if technic_rating == 1 %} selected {% endif %}"
+                                          onclick="submitForm(1)">1</span>
+                                    <span class="ratingButton {% if technic_rating == 2 %} selected {% endif %}"
+                                          onclick="submitForm(2)">2</span>
+                                    <span class="ratingButton {% if technic_rating == 3 %} selected {% endif %}"
+                                          onclick="submitForm(3)">3</span>
+                                    <span class="ratingButton {% if technic_rating == 4 %} selected {% endif %}"
+                                          onclick="submitForm(4)">4</span>
+                                    <span class="ratingButton {% if technic_rating == 5 %} selected {% endif %}"
+                                          onclick="submitForm(5)">5</span>
+                                  <input type="hidden" name="rating" id="selectedRating" value="">
+                                </form>
+
+                                <script>
+                                  function submitForm(rating) {
+                                    const selectedRatingInput = document.getElementById("selectedRating");
+
+                                    selectedRatingInput.value = rating; // Устанавливаем выбранное значение рейтинга в скрытое поле input
+
+                                    // Автоматически отправляем форму
+                                    const form = document.getElementById("ratingForm");
+                                    form.submit();
+                                  }
+                                </script>
+                            {% else %}
+                                <label for="rating"><b>Рейтинг:</b></label>
+                                зайдите под свои логином
+                            {% endif %}
+                        </li>
+                        <li style="list-style: none">
+                            {% get_tech_rating technic.id as technic_rating %}
+                            <span><b>Рейтинг модели:</b> {{ technic_rating }}</span>
+                        </li>
+                        <li style="list-style: none" class="price-item">
+                            <b>Цена:</b>
                                 {{ technic.price }} $
-<!--                                Шаблоны для вывода рейтинга-->
-<!--                                <span class="fa fa-star" aria-hidden="true"&ndash;&gt;-->
-<!--                                      style="outline: none; cursor: inherit;"></span>-->
-<!--                                <span class="fa fa-star" aria-hidden="true"-->
-<!--                                      style="outline: none; cursor: inherit;"></span>-->
-<!--                                <span class="fa fa-star" aria-hidden="true"-->
-<!--                                      style="outline: none; cursor: inherit;"></span>-->
-<!--                                <span class="fa fa-star" aria-hidden="true"-->
-<!--                                      style="outline: none; cursor: inherit;"></span>-->
-<!--                                <span class="fa fa-star" aria-hidden="true"-->
-<!--                                      style="outline: none; cursor: inherit;"></span>-->
-<!--                                <span class="fa fa-star" aria-hidden="true"-->
-<!--                                      style="outline: none; cursor: inherit;"></span>-->
-<!--                                <span class="editContent"-->
-<!--                                      style="outline: none; cursor: inherit;">5.0</span>-->
-                            </a>
+
                         </li>
                     </ul>
                         <div class="share-desc">
@@ -90,7 +115,7 @@
                                     {% if user.is_authenticated %}
                                         {% get_user_like technic.id as technic_like %}
                                         <li style="list-style: none">
-                                            <form method="post" action="{% url 'add_ratings_url' technic.id %}">
+                                            <form method="post" action="{% url 'add_like_url' technic.id %}">
                                                 {% csrf_token %}
                                                 <input type="hidden" name="additional_data" value="your_additional_data_here">
                                                 <button type="submit" class="like-button {% if technic_like %}liked{% endif %}">Like</button>
@@ -111,8 +136,6 @@
 
                 <h3 class="shop-sing editContent" style="outline: none; cursor: inherit;">
                     Краткое описание {{ technic.small_description }}
-                    {% get_tech_rating technic.id as technic_rating %}
-                    {{ technic_rating }}
                 </h3>
                 <p>
                     {% for photo in technic.phototech_set.all %}
@@ -122,6 +145,11 @@
                     {% endfor %}
                 </p>
                 <p class="editContent" style="outline: none; cursor: inherit;">
+<!--                    для отладки рейтинга-->
+<!--                    {% for user_tech_relation in technic.usertechrelation_set.all %}-->
+<!--                      {{ user_tech_relation.user }}: {{ user_tech_relation.rating }}-->
+<!--                    {% endfor %}-->
+
                     {{ technic.description|safe }}
                 </p>
                 <!--                        видео-->

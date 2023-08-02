@@ -2,10 +2,15 @@ from django.test import TestCase
 
 from technics.serializers import MarkSerializer, CategorySerializer, TechSerializer
 from technics.models import *
+from technics.templatetags.technic_tag import get_tech_rating
 
 
 class TechSerializerTestCase(TestCase):
     def setUp(self):
+        self.user_1 = User.objects.create(username='user_1')
+        self.user_2 = User.objects.create(username='user_2')
+        self.user_3 = User.objects.create(username='user_3')
+
         self.mark_1 = Mark.objects.create(mark='Mark1', slug='mark1')
         self.mark_2 = Mark.objects.create(mark='Mark2', slug='mark2')
 
@@ -47,6 +52,8 @@ class TechSerializerTestCase(TestCase):
         )
 
     def test_mark(self):
+        """Проверка создания объектов модели Mark"""
+
         data = MarkSerializer([self.mark_1, self.mark_2], many=True).data
 
         expected_data = [
@@ -64,6 +71,8 @@ class TechSerializerTestCase(TestCase):
         self.assertEqual(expected_data, data)
 
     def test_category(self):
+        """Проверка создания объектов модели Category"""
+
         data = CategorySerializer([self.category_1, self.category_2], many=True).data
 
         expected_data = [
@@ -81,20 +90,28 @@ class TechSerializerTestCase(TestCase):
         self.assertEqual(expected_data, data)
 
     def test_relation(self):
-        user_1 = User.objects.create(username='user_1')
-        user_2 = User.objects.create(username='user_2')
-        user_3 = User.objects.create(username='user_3')
+        """Проверка связи между юзером и объектом модели Technics"""
 
         UserTechRelation.objects.create(
-            user=user_1, technics=self.technic_1, like=True, in_bookmarks=True, rating=4
+            user=self.user_1, technics=self.technic_1, like=True, in_bookmarks=True, rating=4
         )
         UserTechRelation.objects.create(
-            user=user_2, technics=self.technic_1, like=True, in_bookmarks=True, rating=3
+            user=self.user_2, technics=self.technic_1, like=True, in_bookmarks=True, rating=3
         )
         UserTechRelation.objects.create(
-            user=user_3, technics=self.technic_3, like=True, in_bookmarks=True, rating=2
+            user=self.user_3, technics=self.technic_1, like=False, in_bookmarks=True, rating=5
         )
-        serializer = TechSerializer(self.technic_1)
-        self.assertTrue(UserTechRelation.objects.filter(user=user_1, technics=self.technic_1).exists())
-        self.assertEqual(2, serializer.data['likes_count'])
+        UserTechRelation.objects.create(
+            user=self.user_3, technics=self.technic_3, like=True, rating=2
+        )
+        serializer_1 = TechSerializer(self.technic_1)
+        serializer_2 = TechSerializer(self.technic_3)
 
+        self.assertTrue(UserTechRelation.objects.filter(user=self.user_1, technics=self.technic_1).exists())
+        self.assertEqual(2, serializer_1.data['likes_count'])
+        self.assertEqual(1, serializer_2.data['likes_count'])
+        self.assertEqual(4, get_tech_rating(self.technic_1.id))
+        self.assertEqual(2, get_tech_rating(self.technic_3.id))
+        self.assertEqual("Рейтинг не установлен", get_tech_rating(self.technic_2.id))
+        self.assertTrue(self.technic_1.usertechrelation_set.filter(user=self.user_1, in_bookmarks=True))
+        self.assertFalse(self.technic_3.usertechrelation_set.filter(user=self.user_3, in_bookmarks=True))

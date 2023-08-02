@@ -140,6 +140,8 @@ def post_like(request, pk):
 
 
 def post_rating(request, pk):
+    """Установка рейтинга на объект модели Technics"""
+
     if request.method == 'POST':
         rating = request.POST.get('rating')
         if rating:

@@ -114,15 +114,17 @@
                                     </li>
                                     {% if user.is_authenticated %}
                                         {% get_user_like technic.id as technic_like %}
+                                        {% get_tech_likes technic.id as all_tech_likes %}
                                         <li style="list-style: none">
                                             <form method="post" action="{% url 'add_like_url' technic.id %}">
                                                 {% csrf_token %}
                                                 <input type="hidden" name="additional_data" value="your_additional_data_here">
-                                                <button type="submit" class="like-button {% if technic_like %}liked{% endif %}">Like</button>
+                                                <button type="submit" class="like-button {% if technic_like %}liked{% endif %}">{{ all_tech_likes }} Like</button>
                                             </form>
                                         </li>
                                     {% else %}
-                                        <button type="button" class="disabled-button" disabled title="Зайдите под своим логином и паролем">Like</button>
+                                        {% get_tech_likes technic.id as all_tech_likes %}
+                                        <button type="button" class="disabled-button" disabled title="Зайдите под своим логином и паролем">{{ all_tech_likes }} Like</button>
                                     {% endif %}
                                 </ul>
                             </div>

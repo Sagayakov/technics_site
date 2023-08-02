@@ -81,3 +81,10 @@ def get_user_rating(context, tech_id):
         return user_tech_relation.rating
     except UserTechRelation.DoesNotExist:
         return False
+
+
+@register.simple_tag
+def get_tech_likes(tech_id):
+    """Выводит количество всех лайков на объекте модели Technics"""
+
+    return UserTechRelation.objects.filter(technics_id=tech_id, like=True).count()

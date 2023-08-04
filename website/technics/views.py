@@ -1,4 +1,4 @@
-from django.db.models import Q
+from django.db.models import Q, Count, Case, When, Avg
 from django.views.generic import ListView, DetailView
 from django.shortcuts import redirect
 from django.views.generic.base import View
@@ -99,7 +99,10 @@ class Search(ListView):
 class TechViewSet(ModelViewSet):
     """API Technics"""
 
-    queryset = Technics.objects.all()
+    queryset = Technics.objects.all().annotate(
+            likes_annotated=Count(Case(When(usertechrelation__like=True, then=1))),
+            rating_annotated=Avg('usertechrelation__rating')
+    ).select_related('owner').prefetch_related('clients').order_by('id')
     serializer_class = TechSerializer
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     permission_classes = [IsOwnerOrAdminOrReadOnly]

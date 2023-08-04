@@ -1,7 +1,10 @@
 import json
 
+from django.db.models import Count, Case, When, Avg
+from django.db import connection
 from django.urls import reverse
 from django.contrib.auth.models import User
+from django.test.utils import CaptureQueriesContext
 from rest_framework.test import APITestCase
 from rest_framework import status
 
@@ -54,22 +57,39 @@ class TechApiTestCase(APITestCase):
             description='Описание полное для техники3',
             is_public=True
         )
+        UserTechRelation.objects.create(
+            user=self.user, technics=self.technic_1, like=True, in_bookmarks=True, rating=5
+        )
 
     def test_get(self):
         """Сравниваем созданные объекты с получаемыми"""
 
         url = reverse('tech-list')
-        response = self.client.get(url)
-        serializer_data = TechSerializer([self.technic_1, self.technic_2, self.technic_3], many=True).data
+        with CaptureQueriesContext(connection) as queries:
+            # проверка на количество query запросов
+            response = self.client.get(url)
+            self.assertEqual(2, len(queries))
+
+        tech = Technics.objects.all().annotate(
+            likes_annotated=Count(Case(When(usertechrelation__like=True, then=1))),
+            rating_annotated=Avg('usertechrelation__rating')
+        ).order_by('id')
+        serializer_data = TechSerializer(tech, many=True).data
         self.assertEqual(status.HTTP_200_OK, response.status_code)
         self.assertEqual(serializer_data, response.data)
+        self.assertEqual('5.00', serializer_data[0]['rating_annotated'])
+        self.assertEqual(1, serializer_data[0]['likes_annotated'])
 
     def test_get_search(self):
         """Проверяем работу поиска по слову Ключевое, ищем в описании"""
 
         url = reverse('tech-list')
         response = self.client.get(url, data={'search': 'ключевое'})
-        serializer_data = TechSerializer([self.technic_2, self.technic_3], many=True).data
+        tech = Technics.objects.filter(id__in=[self.technic_2.id, self.technic_3.id]).annotate(
+            likes_annotated=Count(Case(When(usertechrelation__like=True, then=1))),
+            rating_annotated=Avg('usertechrelation__rating')
+        )
+        serializer_data = TechSerializer(tech, many=True).data
         self.assertEqual(status.HTTP_200_OK, response.status_code)
         self.assertEqual(serializer_data, response.data)
 
@@ -78,7 +98,11 @@ class TechApiTestCase(APITestCase):
 
         url = reverse('tech-list')
         response = self.client.get(url, data={'price': 1000})
-        serializer_data = TechSerializer([self.technic_1], many=True).data
+        tech = Technics.objects.filter(id__in=[self.technic_1.id]).annotate(
+            likes_annotated=Count(Case(When(usertechrelation__like=True, then=1))),
+            rating_annotated=Avg('usertechrelation__rating')
+        )
+        serializer_data = TechSerializer(tech, many=True).data
         self.assertEqual(status.HTTP_200_OK, response.status_code)
         self.assertEqual(serializer_data, response.data)
 

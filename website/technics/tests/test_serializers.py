@@ -1,3 +1,4 @@
+from django.db.models import Count, Case, When, Avg
 from django.test import TestCase
 
 from technics.serializers import MarkSerializer, CategorySerializer, TechSerializer
@@ -104,14 +105,34 @@ class TechSerializerTestCase(TestCase):
         UserTechRelation.objects.create(
             user=self.user_3, technics=self.technic_3, like=True, rating=2
         )
-        serializer_1 = TechSerializer(self.technic_1)
-        serializer_2 = TechSerializer(self.technic_3)
+        # serializer_1 = TechSerializer(self.technic_1)
+        # serializer_2 = TechSerializer(self.technic_3)
+
+        tech = Technics.objects.all().annotate(
+            likes_annotated=Count(Case(When(usertechrelation__like=True, then=1))),
+            rating_annotated=Avg('usertechrelation__rating')
+        ).order_by('id')
+
+        first_tech = tech.first()
+        second_tech = tech[1]
+        third_tech = tech[2]
+
+        data_serializer = TechSerializer(tech, many=True).data
+
+        # тестирование не только сериализатора, для наглядности засунул все в один тест,
+        # получение рейтинга и лайков разными способами
 
         self.assertTrue(UserTechRelation.objects.filter(user=self.user_1, technics=self.technic_1).exists())
-        self.assertEqual(2, serializer_1.data['likes_count'])
-        self.assertEqual(1, serializer_2.data['likes_count'])
+        self.assertEqual(2, data_serializer[0]['likes_annotated'])
+        self.assertEqual(2, first_tech.likes_annotated)
+        self.assertEqual(1, data_serializer[2]['likes_annotated'])
+        self.assertEqual(1, third_tech.likes_annotated)
+        self.assertEqual('4.00', data_serializer[0]['rating_annotated'])
+        self.assertEqual(4, first_tech.rating_annotated)
         self.assertEqual(4, get_tech_rating(self.technic_1.id))
-        self.assertEqual(2, get_tech_rating(self.technic_3.id))
-        self.assertEqual("Рейтинг не установлен", get_tech_rating(self.technic_2.id))
+        self.assertEqual('2.00', data_serializer[2]['rating_annotated'])
+        self.assertEqual(2, third_tech.rating_annotated)
+        self.assertEqual(None, second_tech.rating_annotated)
+        self.assertEqual(None, data_serializer[1]['rating_annotated'])
         self.assertTrue(self.technic_1.usertechrelation_set.filter(user=self.user_1, in_bookmarks=True))
         self.assertFalse(self.technic_3.usertechrelation_set.filter(user=self.user_3, in_bookmarks=True))

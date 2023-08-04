@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.sites',
     'django.contrib.flatpages',
 
+    'debug_toolbar',
     'ckeditor',
     'ckeditor_uploader',
     'allauth',
@@ -61,7 +62,10 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware'
+    'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
+
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
+    'debug_toolbar_force.middleware.ForceDebugToolbarMiddleware',
 ]
 
 ROOT_URLCONF = 'website.urls'
@@ -258,3 +262,8 @@ CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 
 # CELERY_BROKER_URL = 'redis://redis:6379/0'
+
+# debug_toolbar документация просит
+INTERNAL_IPS = [
+    "127.0.0.1",
+]
